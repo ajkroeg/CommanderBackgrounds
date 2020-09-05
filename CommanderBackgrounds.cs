@@ -36,10 +36,11 @@ namespace CommanderBackgrounds
         { }
 
 
-        [HarmonyPatch(typeof(SGCharacterCreationBackgroundSelectionPanel), "Done")]
-        public static class SGCharacterCreationBackgroundSelectionPanel_Done_Patch
+        [HarmonyPatch(typeof(SGCharacterCreationCareerBackgroundSelectionPanel), "Done")]
+        [HarmonyBefore(new string [] { "de.morphyum.InnerSphereMap" })]
+        public static class SGCharacterCreationCareerBackgroundSelectionPanel_Done_Patch
         {
-            public static void Postfix(SGCharacterCreationBackgroundSelectionPanel __instance)
+            public static void Prefix(SGCharacterCreationCareerBackgroundSelectionPanel __instance)
             {
                 var traverse = Traverse.Create(__instance);
                 var results = new List<SimGameEventResult>();
