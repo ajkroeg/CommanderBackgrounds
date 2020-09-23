@@ -37,9 +37,11 @@ namespace CommanderBackgrounds
 
 
         [HarmonyPatch(typeof(SGCharacterCreationCareerBackgroundSelectionPanel), "Done")]
-        [HarmonyBefore(new string [] { "de.morphyum.InnerSphereMap" })]
+       
         public static class SGCharacterCreationCareerBackgroundSelectionPanel_Done_Patch
         {
+            [HarmonyBefore(new string[] { "de.morphyum.InnerSphereMap" })]
+            [HarmonyPriority(1000)]
             public static void Prefix(SGCharacterCreationCareerBackgroundSelectionPanel __instance)
             {
                 var traverse = Traverse.Create(__instance);
