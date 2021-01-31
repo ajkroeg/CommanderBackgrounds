@@ -50,9 +50,9 @@ namespace CommanderBackgrounds
                 var playerBackground = traverse.Property("playerBackground").GetValue<List<BackgroundDef>>();
                 
                 foreach (BackgroundDef backgroundDef in playerBackground)
-                    {
-                        results.Add(backgroundDef.Results);
-                    }
+                {
+                    results.Add(backgroundDef.Results);
+                }
 
                 SimGameState.ApplySimGameEventResult(results);
                 return;
