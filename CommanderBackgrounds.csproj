@@ -53,6 +53,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Logger.cs" />
     <Compile Include="CommanderBackgrounds.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
