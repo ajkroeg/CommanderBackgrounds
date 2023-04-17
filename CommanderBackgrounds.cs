@@ -1,16 +1,11 @@
 ﻿using System;
-using Harmony;
 using BattleTech;
-using Unity;
 using HBS.Collections;
-using UnityEngine;
 using BattleTech.UI;
 using Newtonsoft.Json;
 using System.Reflection;
 using System.Collections.Generic;
-using System.IO;
 using Newtonsoft.Json.Linq;
-using UnityEngine.Events;
 
 namespace CommanderBackgrounds
 {
@@ -36,9 +31,10 @@ namespace CommanderBackgrounds
             {
                 modSettings = new Settings();
             }
-            var harmony = HarmonyInstance.Create("us.wulfbone.CommanderBackgrounds");
+            var HarmonyPackage = "us.wulfbone.CommanderBackgrounds";
             Mod.modLog.LogMessage($"Initializing Commander Backgrounds - Version {typeof(Settings).Assembly.GetName().Version}");
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            //harmony.PatchAll(Assembly.GetExecutingAssembly());
+            Harmony.CreateAndPatchAll(Assembly.GetExecutingAssembly(), HarmonyPackage);
             Initialize();
         }
 
@@ -75,13 +71,14 @@ namespace CommanderBackgrounds
         {
             [HarmonyBefore(new string[] { "de.morphyum.InnerSphereMap" })]
             [HarmonyPriority(1000)]
+            [HarmonyWrapSafe]
             public static void Prefix(SGCharacterCreationCareerBackgroundSelectionPanel __instance)
             {
-                var traverse = Traverse.Create(__instance);
+                //var traverse = Traverse.Create(__instance);
                 var results = new List<SimGameEventResult>();
 
-                var playerBackground = traverse.Property("playerBackground").GetValue<List<BackgroundDef>>();
-
+                //var playerBackground = traverse.Property("playerBackground").GetValue<List<BackgroundDef>>();
+                var playerBackground = __instance.playerBackground;
                 foreach (BackgroundDef backgroundDef in playerBackground)
                 {
                     results.Add(backgroundDef.Results);
@@ -99,8 +96,9 @@ namespace CommanderBackgrounds
         [HarmonyPatch(typeof(SimGameState), "DismissPilot", new Type[] {typeof(string)})]
         public static class SimGameState_DismissPilot_Patch
         {
-            public static bool Prefix(string pilotID, SimGameState __instance)
+            public static void Prefix(ref bool __runOriginal, string pilotID, SimGameState __instance)
             {
+                if (!__runOriginal) return;
                 if (pilotID == "*")
                 {
                     foreach (Pilot pilot in __instance.PilotRoster.ToList())
@@ -110,11 +108,11 @@ namespace CommanderBackgrounds
                             __instance.DismissPilot(pilot);
                         }
                     }
-
-                    return false;
+                    __runOriginal = false;
+                    return;
                 }
-
-                return true;
+                __runOriginal = true;
+                return;
             }
         }
     }
