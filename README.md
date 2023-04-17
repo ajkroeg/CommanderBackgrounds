@@ -1,3 +1,5 @@
+**v1.1.0.0 and higher require modtek v3 or higher**
+
 Commander Backgrounds is a mod for HBS's Battletech computer game. It does nothing on its own, but in conjunction with ModTek, provides two features for json modding.
 
 ## Commander Backgrounds
